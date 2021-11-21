@@ -1,6 +1,5 @@
 #include <stdio.h>
-/* declarer la structure pour facélité le saisir 
-les information de plusieur comptes*/
+/* declarer la structure */
 struct InfoClients{
     char CIN[10];
     char Nom[10];
