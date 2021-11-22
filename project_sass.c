@@ -1,19 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <windows.h>
-#define MAX 200
 /*Declarer de fichie Global*/
-FILE *Data = NULL;
+//FILE *Data = NULL;
 /* declarer la structure */
-
 typedef struct{
     char CIN[10];
     char Nom[10];
     char Prenom[10];
-    double Montant;
+    float Montant;
 }InfoClients;
 
-/* fonction de saisir les infomations de compte*/
+/* declarer le tableu global */
+InfoClients info[10];
+int NbrClients;
+
+/*
 void    SaisirInfoClients(){
     InfoClients info;
     printf("entrer le CIN: ");
@@ -26,7 +29,6 @@ void    SaisirInfoClients(){
     scanf("%lf",&info.Montant);
     printf("\n---Ajouter est Succee---\n");
 
-    /*ouvrir de fichier et enregistrer les donnee des client dans ce */
     system("cls");
     Data = fopen("Data.txt","a");
     if(Data == NULL){
@@ -36,28 +38,98 @@ void    SaisirInfoClients(){
         fprintf(Data,"%s %s %s %lf \n",info.CIN,info.Nom,info.Prenom,info.Montant);
         fclose(Data);
     }
-}
+}*/
+
 /* fonction pour ajouter un compte*/
 void    AjouterCompte(){
+    system("cls");
     printf("\n___Introduire un compte bancaire___\n\n");
     printf("__veuille saisir les informations__\n\n");
-    SaisirInfoClients();
+    printf("entrer le CIN: ");
+    scanf("%s",info[0].CIN);
+    printf("entrer le Nom: ");
+    scanf("%s",info[0].Nom);
+    printf("entrer le Prenom: ");
+    scanf("%s",info[0].Prenom);
+    printf("entrer le Montant: ");
+    scanf("%f",&info[0].Montant);
+    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+    printf("\n---Ajouter est Succee---\n");
+
 }
 /* fonction pour ajouter plusieurs compte*/
 void    AjouterPlusieurCompte(){
+    system("cls");
     int NbrClients,i,j;
-    InfoClients info[MAX];
     printf("\n___Introduire plusieurs compte bancaire___\n\n");
     printf("saisir le nombre des comptes que vou avez ajouter: \n");
     scanf("%d",&NbrClients);
-    for (i = 1; i <= NbrClients; i++)
+    for (i = 0; i < NbrClients; i++)
     {
-        printf("\nveuille saisir les informations numero %d: \n\n",i);
-        SaisirInfoClients();
+        printf("\nveuille saisir les informations numero %d: \n\n",i+1);
+        printf("entrer le CIN: ");
+        scanf("%s",info[i].CIN);
+        printf("entrer le Nom: ");
+        scanf("%s",info[i].Nom);
+        printf("entrer le Prenom: ");
+        scanf("%s",info[i].Prenom);
+        printf("entrer le Montant: ");
+        scanf("%f",&info[i].Montant);
     }
+    for (j = 0; j < NbrClients; j++){
+        printf("\nles informations de client numero %d\n\n",j+1);
+        printf("%s ",info[j].CIN);
+        printf("%s ",info[j].Nom);
+        printf("%s ",info[j].Prenom); 
+        printf("%f ",info[j].Montant);
+        printf("\n");
+    }
+    printf("\n---Ajouter est Succee---\n");
+}
+
+/* fonction pour rechercher des compte par CIN*/
+int    RechercheParCIN(){
+    InfoClients CIN;
+    int i;
+    printf("donner votre CIN:");
+    scanf("%s",CIN.CIN);
+    for(i = 0;i<NbrClients;i++){
+        int test = strcmp(CIN.CIN,info[i].CIN);
+        if(test == 1){
+            return i;
+        }
+        else{
+            printf("ce cin nexest pas:");
+        }
+    }
+
+}
+/* fonction pour retrait de montant*/
+void    Retrait(){
+    float Montant;
+    int i = RechercheParCIN();
+    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+    printf("donner le Montant pour retrait:");
+    scanf("%f",&Montant);
+    info[i].Montant = info[i].Montant - Montant;
+    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+}
+
+/* fonction pour depot de montant*/
+void    Depot(){
+    float Montant;
+    int i = RechercheParCIN();
+    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+    printf("donner le Montant pour depot:");
+    scanf("%f",&Montant);
+    info[i].Montant = info[i].Montant + Montant;
+    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+    
 }
 /*fonction pour les operations dans le compte*/
+
 void    Operations(){
+    system("cls");
     int choix;
     system("cls");
     printf("\t---------Les opertaion-----------\n\n");
@@ -67,8 +139,10 @@ void    Operations(){
     scanf("%d",&choix);
     switch(choix){
         case 1:
+            Retrait();
         break;
         case 2:
+            Depot();
         break;
         default:
             printf("__erreur de saisi__");
@@ -107,19 +181,20 @@ void    Affichage(){
 
 /* fonction pour afficher le menu principal de l'application*/
 void    MenuPrincipal(){
+    system("cls");
     int choix;
     printf("\n\t---------------BIENVENU------------------\n\n");
     do
     {
         
-        printf("\n\t__1_Introduire un compte bancaire_________\n");
-        printf("\t__2_Introduire plusieurs comptes bancaires\n");
-        printf("\t__3_Operations____________________________\n");
-        printf("\t__4_Affichage_____________________________\n");
-        printf("\t__5_Fidelisation__________________________\n");
-        printf("\t__6_Quitter l\'application_________________\n");
-        printf("\t____________donner votre choix ___________\n");
-        scanf("%d",&choix);
+        printf("\n\t__1_Introduire un compte bancaire_________\n\n");
+        printf("\t__2_Introduire plusieurs comptes bancaires\n\n");
+        printf("\t__3_Operations____________________________\n\n");
+        printf("\t__4_Affichage_____________________________\n\n");
+        printf("\t__5_Fidelisation__________________________\n\n");
+        printf("\t__6_Quitter l\'application_________________\n\n");
+        printf("\t____________donner votre choix ___________\n\n");
+        scanf("\t%d",&choix);
 
         switch (choix)
         {
@@ -133,7 +208,7 @@ void    MenuPrincipal(){
             Operations();
             break;
         case 4:
-
+             Affichage();
             break;
         case 5:
             /* code */
