@@ -12,9 +12,11 @@ typedef struct{
     float Montant;
 }InfoClients;
 
-/* declarer le tableu global */
+/* declarer le variable global */
 InfoClients info[10];
-int NbrClients;
+int NbrClients = 0;
+int indextabl = 0;
+int i = 0;
 
 /* Prototype des fonctions */
 void MenuPrincipal();
@@ -54,21 +56,20 @@ void    SaisirInfoClients(){
 
 /* fonction pour ajouter un compte*/
 void    AjouterCompte(){
-    int i = 0;
     system("cls");
-    printf("\n___Introduire un compte bancaire___\n\n");
-    printf("__veuille saisir les informations__\n\n");
-    printf("entrer le CIN: ");
+    printf("\n\t___Introduire un compte bancaire___\n\n");
+    printf("\t__veuille saisir les informations__\n\n");
+    printf("\tentrer le CIN: ");
     scanf("%s",info[i].CIN);
-    printf("entrer le Nom: ");
+    printf("\tentrer le Nom: ");
     scanf("%s",info[i].Nom);
-    printf("entrer le Prenom: ");
+    printf("\tentrer le Prenom: ");
     scanf("%s",info[i].Prenom);
-    printf("entrer le Montant: ");
+    printf("\tentrer le Montant: ");
     scanf("%f",&info[i].Montant);
     printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
     printf("\n---Ajouter est Succee---\n");
-    i++;
+    indextabl++;
 
 }
 /* fonction pour ajouter plusieurs compte*/
@@ -81,21 +82,22 @@ void    AjouterPlusieurCompte(){
     for (i = 0; i < NbrClients; i++)
     {
         printf("\nveuille saisir les informations numero %d: \n\n",i+1);
-        printf("entrer le CIN: ");
+        printf("\tentrer le CIN: ");
         scanf("%s",info[i].CIN);
-        printf("entrer le Nom: ");
+        printf("\tentrer le Nom: ");
         scanf("%s",info[i].Nom);
-        printf("entrer le Prenom: ");
+        printf("\tentrer le Prenom: ");
         scanf("%s",info[i].Prenom);
-        printf("entrer le Montant: ");
+        printf("\tentrer le Montant: ");
         scanf("%f",&info[i].Montant);
+        indextabl++;
     }
     for (i = 0; i < NbrClients; i++){
-        printf("\nles informations de client numero %d\n\n",i+1);
-        printf("%s ",info[i].CIN);
-        printf("%s ",info[i].Nom);
-        printf("%s ",info[i].Prenom); 
-        printf("%f ",info[i].Montant);
+        printf("\n\tles informations de client numero %d\n\n",i+1);
+        printf("\t%s ",info[i].CIN);
+        printf("\t%s ",info[i].Nom);
+        printf("\t%s ",info[i].Prenom); 
+        printf("\t%f ",info[i].Montant);
         printf("\n");
     }
     printf("\n---Ajouter est Succee---\n");
@@ -103,17 +105,22 @@ void    AjouterPlusieurCompte(){
 
 /* fonction pour rechercher des compte par CIN avec fonction strstr*/
 int    RechercheParCin(){
+    printf("%d",indextabl);
     char cin[10];
     int i;
-    printf("donner votre CIN:");
+    printf("\tdonner votre CIN:");
     scanf("%s",cin);
-    for(i = 0;i<sizeof(info);i++)
+    for(i = 0;i<indextabl;i++)
     {
         if(strstr(cin,info[i].CIN))
         {
             return i;
         }
+        else{
+            printf("");
+        }
     }
+
 }
 /* fonction pour retrait de montant*/
 void    Retrait(){
@@ -121,7 +128,7 @@ void    Retrait(){
     float Montant;
     int i = RechercheParCin();
     printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
-    printf("\ndonner le Montant pour retrait: ");
+    printf("\n\tdonner le Montant pour retrait: ");
     scanf("%f",&Montant);
 
     if(Montant > info[i].Montant){
@@ -138,7 +145,7 @@ void    Depot(){
     float Montant;
     int i = RechercheParCin();
     printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
-    printf("\ndonner le Montant pour depot:");
+    printf("\n\tdonner le Montant pour depot:");
     scanf("%f",&Montant);
     info[i].Montant = info[i].Montant + Montant;
     printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
@@ -170,13 +177,86 @@ void    Operations(){
         break;
     }
 }
-void    Tri(){
-    
+
+/* fonction de trier de tableau*/
+void    TriTabl(){
+    int i,j;
+    InfoClients temp;
+    for (i = 0; i <indextabl; i++)
+        for(j = 0; j <indextabl; j++)
+            if(info[j].Montant > info[j +1].Montant){
+                temp= info[j];
+                info[j] = info[j +1];
+                info[j + 1] = temp;
+            }
 }
 
 /* fonction pour afficher les compte par ordre ascendant*/
 void    ParOrdreAscendant(){
+    TriTabl();
+    int i;
+    for(i = 0;i<indextabl;i++)
+    {
+        printf("\t%s ",info[i].CIN);
+        printf("\t%s ",info[i].Nom);
+        printf("\t%s ",info[i].Prenom);
+        printf("\t%f ",info[i].Montant);
+        printf("\n\n");
+    }
+}
 
+/* fonction pour afficher les compte par ordre Descendant*/
+void    ParOrdreDescendant(){
+    TriTabl();
+    int i;
+    printf("\n");
+    for(i = indextabl;i>=0;i--)
+    {
+        printf("\t%s ",info[i].CIN);
+        printf("\t%s ",info[i].Nom);
+        printf("\t%s ",info[i].Prenom);
+        printf("\t%f ",info[i].Montant);
+        printf("\n\n");
+    }
+}
+/* Par Ordre Ascendant (les comptes bancaires ayant un montant supérieur à un chiffre introduit)*/
+void    ParOrdreAscendantSpCh(){
+    TriTabl();
+    int i;
+    float Montant;
+    printf("entrer un Montant:");
+    scanf("%f",&Montant);
+
+    for(i = 0;i<indextabl;i++)
+    {
+        if(info[i].Montant > Montant){
+            printf("\t%s ",info[i].CIN);
+            printf("\t%s ",info[i].Nom);
+            printf("\t%s ",info[i].Prenom);
+            printf("\t%f ",info[i].Montant);
+            printf("\t\n\n");
+        }
+    }
+}
+
+/* Par Ordre Descendant (les comptes bancaires ayant un montant supérieur à un chiffre*/
+void    ParOrdreDescendantSpCh(){
+    TriTabl();
+    int i;
+    float Montant;
+    printf("entrer un Montant:");
+    scanf("%f",&Montant);
+
+    for(i = indextabl;i>=0;i--)
+    {
+        if(info[i].Montant < Montant){
+            printf("\t%s ",info[i].CIN);
+            printf("\t%s ",info[i].Nom);
+            printf("\t%s ",info[i].Prenom);
+            printf("\t%f ",info[i].Montant);
+            printf("\t\n\n");
+        }
+    }
 }
 /*fonction pour affichage*/
 void    Affichage(){
@@ -193,15 +273,20 @@ void    Affichage(){
     scanf("%d",&choix);
     switch(choix){
         case 1:
-            ListTousLesComptes();
+            ParOrdreAscendant();
         break;
         case 2:
+            ParOrdreDescendant();
         break;
         case 3:
+            ParOrdreAscendantSpCh();
         break;
         case 4:
+            ParOrdreDescendantSpCh();
         break;
         case 5:
+            i = RechercheParCin();
+            printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
         break;
         case 6:
             MenuPrincipal();
@@ -241,6 +326,7 @@ void    MenuPrincipal(){
             Operations();
             break;
         case 4:
+            Affichage();
             break;
         case 5:
             /* code */
@@ -257,6 +343,7 @@ void    MenuPrincipal(){
 }
 
 int main(){
+    system("COLOR 0A");
     MenuPrincipal();
     return 0;
 }
