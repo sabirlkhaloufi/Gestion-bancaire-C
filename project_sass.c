@@ -16,6 +16,18 @@ typedef struct{
 InfoClients info[10];
 int NbrClients;
 
+/* Prototype des fonctions */
+void MenuPrincipal();
+void    AjouterCompte();
+void    AjouterPlusieurCompte();
+void    Operations();
+int    RechercheParCIN();
+void    Retrait();
+void    Depot();
+void    Affichage();
+void    AfficherTousLesCompte();
+void    ParOrdreAscendant();
+
 /*
 void    SaisirInfoClients(){
     InfoClients info;
@@ -42,25 +54,27 @@ void    SaisirInfoClients(){
 
 /* fonction pour ajouter un compte*/
 void    AjouterCompte(){
+    int i = 0;
     system("cls");
     printf("\n___Introduire un compte bancaire___\n\n");
     printf("__veuille saisir les informations__\n\n");
     printf("entrer le CIN: ");
-    scanf("%s",info[0].CIN);
+    scanf("%s",info[i].CIN);
     printf("entrer le Nom: ");
-    scanf("%s",info[0].Nom);
+    scanf("%s",info[i].Nom);
     printf("entrer le Prenom: ");
-    scanf("%s",info[0].Prenom);
+    scanf("%s",info[i].Prenom);
     printf("entrer le Montant: ");
-    scanf("%f",&info[0].Montant);
-    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+    scanf("%f",&info[i].Montant);
+    printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
     printf("\n---Ajouter est Succee---\n");
+    i++;
 
 }
 /* fonction pour ajouter plusieurs compte*/
 void    AjouterPlusieurCompte(){
     system("cls");
-    int NbrClients,i,j;
+    int NbrClients,i;
     printf("\n___Introduire plusieurs compte bancaire___\n\n");
     printf("saisir le nombre des comptes que vou avez ajouter: \n");
     scanf("%d",&NbrClients);
@@ -76,54 +90,58 @@ void    AjouterPlusieurCompte(){
         printf("entrer le Montant: ");
         scanf("%f",&info[i].Montant);
     }
-    for (j = 0; j < NbrClients; j++){
-        printf("\nles informations de client numero %d\n\n",j+1);
-        printf("%s ",info[j].CIN);
-        printf("%s ",info[j].Nom);
-        printf("%s ",info[j].Prenom); 
-        printf("%f ",info[j].Montant);
+    for (i = 0; i < NbrClients; i++){
+        printf("\nles informations de client numero %d\n\n",i+1);
+        printf("%s ",info[i].CIN);
+        printf("%s ",info[i].Nom);
+        printf("%s ",info[i].Prenom); 
+        printf("%f ",info[i].Montant);
         printf("\n");
     }
     printf("\n---Ajouter est Succee---\n");
 }
 
-/* fonction pour rechercher des compte par CIN*/
-int    RechercheParCIN(){
-    InfoClients CIN;
+/* fonction pour rechercher des compte par CIN avec fonction strstr*/
+int    RechercheParCin(){
+    char cin[10];
     int i;
     printf("donner votre CIN:");
-    scanf("%s",CIN.CIN);
-    for(i = 0;i<NbrClients;i++){
-        int test = strcmp(CIN.CIN,info[i].CIN);
-        if(test == 1){
+    scanf("%s",cin);
+    for(i = 0;i<sizeof(info);i++)
+    {
+        if(strstr(cin,info[i].CIN))
+        {
             return i;
         }
-        else{
-            printf("ce cin nexest pas:");
-        }
     }
-
 }
 /* fonction pour retrait de montant*/
 void    Retrait(){
+
     float Montant;
-    int i = RechercheParCIN();
-    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
-    printf("donner le Montant pour retrait:");
+    int i = RechercheParCin();
+    printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+    printf("\ndonner le Montant pour retrait: ");
     scanf("%f",&Montant);
-    info[i].Montant = info[i].Montant - Montant;
-    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+
+    if(Montant > info[i].Montant){
+        printf("impossible Pour retrait!!!");
+    }
+    else{
+        info[i].Montant = info[i].Montant - Montant;
+        printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+    }
 }
 
 /* fonction pour depot de montant*/
 void    Depot(){
     float Montant;
-    int i = RechercheParCIN();
-    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
-    printf("donner le Montant pour depot:");
+    int i = RechercheParCin();
+    printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+    printf("\ndonner le Montant pour depot:");
     scanf("%f",&Montant);
     info[i].Montant = info[i].Montant + Montant;
-    printf("\n%s %s %s %f\n",info[0].CIN,info[0].Nom,info[0].Prenom,info[0].Montant);
+    printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
     
 }
 /*fonction pour les operations dans le compte*/
@@ -131,10 +149,10 @@ void    Depot(){
 void    Operations(){
     system("cls");
     int choix;
-    system("cls");
-    printf("\t---------Les opertaion-----------\n\n");
-    printf("\t___1__Retrait__________:\n\n");
-    printf("\t___2__Depot____________:\n\n");
+    printf("\n\n\t---------Les opertaion-----------\n\n");
+    printf("\t___[1]__Retrait__________:\n\n");
+    printf("\t___[2]__Depot____________:\n\n");
+    printf("\t___[3]____Menu Principal____________:\n\n");
     printf("\tEntrer votre choix:");
     scanf("%d",&choix);
     switch(choix){
@@ -144,26 +162,38 @@ void    Operations(){
         case 2:
             Depot();
         break;
+        case 3:
+            MenuPrincipal();
+        break;
         default:
             printf("__erreur de saisi__");
         break;
     }
 }
+void    Tri(){
+    
+}
 
+/* fonction pour afficher les compte par ordre ascendant*/
+void    ParOrdreAscendant(){
+
+}
 /*fonction pour affichage*/
 void    Affichage(){
     int choix;
     system("cls");
     printf("\t---------L\'affichage-----------\n\n");
-    printf("\t___1__ Par Ordre Ascendant__________:\n\n");
-    printf("\t___2__ Par Ordre Ascendant____________:\n\n");
-    printf("\t___3__Par Ordre Ascendant (les comptes bancaires ayant un montant supérieur à un chiffre introduit)__________:\n\n");
-    printf("\t___4__Par Ordre Descendant (les comptes bancaires ayant un montant supérieur à un chiffre____________:\n\n");
-    printf("\t___5__Recherche par CIN____________:\n\n");
+    printf("\t___[1]__ Par Ordre Ascendant__________:\n\n");
+    printf("\t___[2]__ Par Ordre Ascendant____________:\n\n");
+    printf("\t___[3]__Par Ordre Ascendant (les comptes bancaires ayant un montant supérieur à un chiffre introduit)__________:\n\n");
+    printf("\t___[4]__Par Ordre Descendant (les comptes bancaires ayant un montant supérieur à un chiffre____________:\n\n");
+    printf("\t___[5]__Recherche par CIN____________:\n\n");
+    printf("\t___[6]____Menu Principal____________:\n\n");
     printf("\tEntrer votre choix:");
     scanf("%d",&choix);
     switch(choix){
         case 1:
+            ListTousLesComptes();
         break;
         case 2:
         break;
@@ -172,6 +202,9 @@ void    Affichage(){
         case 4:
         break;
         case 5:
+        break;
+        case 6:
+            MenuPrincipal();
         break;
         default:
             printf("__erreur de saisi__");
@@ -187,12 +220,12 @@ void    MenuPrincipal(){
     do
     {
         
-        printf("\n\t__1_Introduire un compte bancaire_________\n\n");
-        printf("\t__2_Introduire plusieurs comptes bancaires\n\n");
-        printf("\t__3_Operations____________________________\n\n");
-        printf("\t__4_Affichage_____________________________\n\n");
-        printf("\t__5_Fidelisation__________________________\n\n");
-        printf("\t__6_Quitter l\'application_________________\n\n");
+        printf("\n\t__[1]_Introduire un compte bancaire_________\n\n");
+        printf("\t__[2]_Introduire plusieurs comptes bancaires\n\n");
+        printf("\t__[3]_Operations____________________________\n\n");
+        printf("\t__[4]_Affichage_____________________________\n\n");
+        printf("\t__[5]_Fidelisation__________________________\n\n");
+        printf("\t__[6]_Quitter l\'application_________________\n\n");
         printf("\t____________donner votre choix ___________\n\n");
         scanf("\t%d",&choix);
 
@@ -208,7 +241,6 @@ void    MenuPrincipal(){
             Operations();
             break;
         case 4:
-             Affichage();
             break;
         case 5:
             /* code */
