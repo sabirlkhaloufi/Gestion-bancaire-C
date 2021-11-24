@@ -15,7 +15,6 @@ typedef struct{
 
 /* declarer le variable global */
 int indextabl = -1;
-int NbrClients = 0;
 InfoClients info[1000];
 int i = 0;
 
@@ -207,7 +206,7 @@ void    TriTabl(){
 void    ParOrdreAscendant(){
     TriTabl();
     int i;
-    for(i = 0;i<indextabl;i++)
+    for(i = 0;i<=indextabl;i++)
     {
         printf("\t%s ",info[i].CIN);
         printf("\t%s ",info[i].Nom);
