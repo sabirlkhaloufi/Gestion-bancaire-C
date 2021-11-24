@@ -4,6 +4,7 @@
 #include <windows.h>
 /*Declarer de fichie Global*/
 //FILE *Data = NULL;
+
 /* declarer la structure */
 typedef struct{
     char CIN[10];
@@ -105,7 +106,6 @@ void    AjouterPlusieurCompte(){
 
 /* fonction pour rechercher des compte par CIN avec fonction strstr*/
 int    RechercheParCin(){
-    printf("%d",indextabl);
     char cin[10];
     int i;
     printf("\tdonner votre CIN:");
@@ -114,13 +114,13 @@ int    RechercheParCin(){
     {
         if(strstr(cin,info[i].CIN))
         {
+            printf("compte est existe ;");
             return i;
         }
-        else{
-            printf("");
-        }
     }
-
+    if(i == 1){
+        printf("compte n\'existe pas:");
+    }
 }
 /* fonction pour retrait de montant*/
 void    Retrait(){
@@ -182,13 +182,15 @@ void    Operations(){
 void    TriTabl(){
     int i,j;
     InfoClients temp;
-    for (i = 0; i <indextabl; i++)
-        for(j = 0; j <indextabl; j++)
+    for (i = 0; i <indextabl; i++){
+        for(j = 0; j <indextabl; j++){
             if(info[j].Montant > info[j +1].Montant){
                 temp= info[j];
                 info[j] = info[j +1];
                 info[j + 1] = temp;
             }
+        }
+    }
 }
 
 /* fonction pour afficher les compte par ordre ascendant*/
@@ -226,10 +228,9 @@ void    ParOrdreAscendantSpCh(){
     float Montant;
     printf("entrer un Montant:");
     scanf("%f",&Montant);
-
     for(i = 0;i<indextabl;i++)
     {
-        if(info[i].Montant > Montant){
+        if(info[i].Montant < Montant){
             printf("\t%s ",info[i].CIN);
             printf("\t%s ",info[i].Nom);
             printf("\t%s ",info[i].Prenom);
@@ -249,7 +250,7 @@ void    ParOrdreDescendantSpCh(){
 
     for(i = indextabl;i>=0;i--)
     {
-        if(info[i].Montant < Montant){
+        if(info[i].Montant > Montant){
             printf("\t%s ",info[i].CIN);
             printf("\t%s ",info[i].Nom);
             printf("\t%s ",info[i].Prenom);
@@ -258,6 +259,21 @@ void    ParOrdreDescendantSpCh(){
         }
     }
 }
+
+/* fonction pour Fidélisation */
+void    Fidelisation(){
+    TriTabl();
+    int i;
+    for(i = indextabl;i>3;i--)
+    {
+            printf("\t%s ",info[i].CIN);
+            printf("\t%s ",info[i].Nom);
+            printf("\t%s ",info[i].Prenom);
+            printf("\t%f ",info[i].Montant * 1);
+            printf("\t\n\n");
+    }
+}
+
 /*fonction pour affichage*/
 void    Affichage(){
     int choix;
@@ -265,8 +281,8 @@ void    Affichage(){
     printf("\t---------L\'affichage-----------\n\n");
     printf("\t___[1]__ Par Ordre Ascendant__________:\n\n");
     printf("\t___[2]__ Par Ordre Ascendant____________:\n\n");
-    printf("\t___[3]__Par Ordre Ascendant (les comptes bancaires ayant un montant supérieur à un chiffre introduit)__________:\n\n");
-    printf("\t___[4]__Par Ordre Descendant (les comptes bancaires ayant un montant supérieur à un chiffre____________:\n\n");
+    printf("\t___[3]__Par Ordre Ascendant (les comptes bancaires ayant un montant supérieur à un chiffre introduit):\n\n");
+    printf("\t___[4]__Par Ordre Descendant (les comptes bancaires ayant un montant supérieur à un chiffre:\n\n");
     printf("\t___[5]__Recherche par CIN____________:\n\n");
     printf("\t___[6]____Menu Principal____________:\n\n");
     printf("\tEntrer votre choix:");
@@ -301,7 +317,7 @@ void    Affichage(){
 void    MenuPrincipal(){
     system("cls");
     int choix;
-    printf("\n\t---------------BIENVENU------------------\n\n");
+    printf("\n\t------------------BIENVENU---------------------\n\n");
     do
     {
         
@@ -311,7 +327,7 @@ void    MenuPrincipal(){
         printf("\t__[4]_Affichage_____________________________\n\n");
         printf("\t__[5]_Fidelisation__________________________\n\n");
         printf("\t__[6]_Quitter l\'application_________________\n\n");
-        printf("\t____________donner votre choix ___________\n\n");
+        printf("\t_____________donner votre choix ____________\n\n");
         scanf("\t%d",&choix);
 
         switch (choix)
@@ -329,7 +345,7 @@ void    MenuPrincipal(){
             Affichage();
             break;
         case 5:
-            /* code */
+            Fidelisation();
             break;
         case 6:
             printf("\n\nvous avez quitte le programme:");
