@@ -113,14 +113,14 @@ int    RechercheParCin(){
     scanf("%s",cin);
     for(i = 0;i<indextabl;i++)
     {
-        if(strstr(cin,info[i].CIN))
+        if(strcmp(cin,info[i].CIN) == 0)
         {
             printf("compte est existe ;");
             return i;
         }
     }
-    if(i == 0){
-        printf("compte n\'existe pas:");
+    if(strcmp(cin,info[i].CIN) == 1){
+        return -1;
     }
 }
 /* fonction pour retrait de montant*/
@@ -128,7 +128,8 @@ void    Retrait(){
 
     float Montant;
     int i = RechercheParCin();
-    printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+    if(i >= 0){
+        printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
     printf("\n\tdonner le Montant pour retrait: ");
     scanf("%f",&Montant);
 
@@ -139,18 +140,26 @@ void    Retrait(){
         info[i].Montant = info[i].Montant - Montant;
         printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
     }
+    }
+    else{
+        printf("ce compte n\'existe pas");
+    }
 }
 
 /* fonction pour depot de montant*/
 void    Depot(){
     float Montant;
     int i = RechercheParCin();
-    printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
-    printf("\n\tdonner le Montant pour depot:");
-    scanf("%f",&Montant);
-    info[i].Montant = info[i].Montant + Montant;
-    printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
-    
+    if(i >= 0){
+        printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+        printf("\n\tdonner le Montant pour depot: ");
+        scanf("%f",&Montant);
+        info[i].Montant = info[i].Montant + Montant;
+        printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+    }
+    else{
+        printf("ce compte n\'existe pas");
+    }
 }
 /*fonction pour les operations dans le compte*/
 
@@ -312,7 +321,10 @@ void    Affichage(){
         break;
         case 5:
             i = RechercheParCin();
-            printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+            if(i >= 0)
+                printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+            else
+                printf("ce compte n\'existe pas:");
         break;
         case 6:
             MenuPrincipal();
