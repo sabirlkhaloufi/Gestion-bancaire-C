@@ -14,9 +14,9 @@ typedef struct{
 }InfoClients;
 
 /* declarer le variable global */
-InfoClients info[10];
+int indextabl = -1;
 int NbrClients = 0;
-int indextabl = 0;
+InfoClients info[1000];
 int i = 0;
 
 /* Prototype des fonctions */
@@ -93,6 +93,7 @@ void    AjouterPlusieurCompte(){
         scanf("%f",&info[i].Montant);
         indextabl++;
     }
+    
     for (i = 0; i < NbrClients; i++){
         printf("\n\tles informations de client numero %d\n\n",i+1);
         printf("\t%s ",info[i].CIN);
@@ -118,7 +119,7 @@ int    RechercheParCin(){
             return i;
         }
     }
-    if(i == 1){
+    if(i == 0){
         printf("compte n\'existe pas:");
     }
 }
@@ -262,14 +263,23 @@ void    ParOrdreDescendantSpCh(){
 
 /* fonction pour Fidélisation */
 void    Fidelisation(){
-    TriTabl();
-    int i;
-    for(i = indextabl;i>3;i--)
+    int i,j;
+    InfoClients temp;
+    for (i = 0; i <indextabl; i++){
+        for(j = 0; j <indextabl; j++){
+            if(info[j].Montant < info[j +1].Montant){
+                temp= info[j];
+                info[j] = info[j +1];
+                info[j + 1] = temp;
+            }
+        }
+    }
+    for(i = 0 ; i<3 ;i++)
     {
             printf("\t%s ",info[i].CIN);
             printf("\t%s ",info[i].Nom);
             printf("\t%s ",info[i].Prenom);
-            printf("\t%f ",info[i].Montant * 1);
+            printf("\t%f ",info[i].Montant * 1.3);
             printf("\t\n\n");
     }
 }
@@ -278,11 +288,11 @@ void    Fidelisation(){
 void    Affichage(){
     int choix;
     system("cls");
-    printf("\t---------L\'affichage-----------\n\n");
+    printf("\t-----------------L\'affichage-----------------\n\n");
     printf("\t___[1]__ Par Ordre Ascendant__________:\n\n");
-    printf("\t___[2]__ Par Ordre Ascendant____________:\n\n");
-    printf("\t___[3]__Par Ordre Ascendant (les comptes bancaires ayant un montant supérieur à un chiffre introduit):\n\n");
-    printf("\t___[4]__Par Ordre Descendant (les comptes bancaires ayant un montant supérieur à un chiffre:\n\n");
+    printf("\t___[2]__ Par Ordre Descendant____________:\n\n");
+    printf("\t___[3]__Par Ordre Ascendant (les comptes bancaires ayant un montant superieur à un chiffre):\n\n");
+    printf("\t___[4]__Par Ordre Descendant (les comptes bancaires ayant un montant superieur à un chiffre:\n\n");
     printf("\t___[5]__Recherche par CIN____________:\n\n");
     printf("\t___[6]____Menu Principal____________:\n\n");
     printf("\tEntrer votre choix:");
