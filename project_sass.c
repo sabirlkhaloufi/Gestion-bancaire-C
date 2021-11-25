@@ -129,16 +129,16 @@ void    Retrait(){
     int i = RechercheParCin();
     if(i >= 0){
         printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
-    printf("\n\tdonner le Montant pour retrait: ");
-    scanf("%f",&Montant);
+        printf("\n\tdonner le Montant pour retrait: ");
+        scanf("%f",&Montant);
 
-    if(Montant > info[i].Montant){
-        printf("impossible Pour retrait!!!");
-    }
-    else{
-        info[i].Montant = info[i].Montant - Montant;
-        printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
-    }
+        if(Montant > info[i].Montant){
+            printf("impossible Pour retrait!!!");
+        }
+        else{
+            info[i].Montant = info[i].Montant - Montant;
+            printf("\n%s %s %s %f\n",info[i].CIN,info[i].Nom,info[i].Prenom,info[i].Montant);
+        }
     }
     else{
         printf("ce compte n\'existe pas");
@@ -299,8 +299,8 @@ void    Affichage(){
     printf("\t-----------------L\'affichage-----------------\n\n");
     printf("\t___[1]__ Par Ordre Ascendant__________:\n\n");
     printf("\t___[2]__ Par Ordre Descendant____________:\n\n");
-    printf("\t___[3]__Par Ordre Ascendant (les comptes bancaires ayant un montant superieur à un chiffre):\n\n");
-    printf("\t___[4]__Par Ordre Descendant (les comptes bancaires ayant un montant superieur à un chiffre:\n\n");
+    printf("\t___[3]__Par Ordre Ascendant (les comptes bancaires ayant un montant superieur a un chiffre):\n\n");
+    printf("\t___[4]__Par Ordre Descendant (les comptes bancaires ayant un montant superieur a un chiffre:\n\n");
     printf("\t___[5]__Recherche par CIN____________:\n\n");
     printf("\t___[6]____Menu Principal____________:\n\n");
     printf("\tEntrer votre choix:");
